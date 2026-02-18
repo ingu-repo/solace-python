@@ -1,3 +1,6 @@
+# Topic
+#   - Published data is volatile
+#
 # Pre-requisites:
 #   pip install solace-pubsubplus
 #
