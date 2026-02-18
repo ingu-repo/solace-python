@@ -4,9 +4,18 @@ from solace.messaging.resources.queue import Queue
 from solace.messaging.receiver.message_receiver import MessageHandler
 
 class MyMessageHandler(MessageHandler):
+    def __init__(self, receiver):
+        self.receiver = receiver
+
     def on_message(self, message):
-        payload = message.get_payload_as_string()
-        print(f"Received: {payload}")
+        try:
+            payload = message.get_payload_as_string()
+            print(f"Received: {payload}")
+
+            # Delete Que messages
+            self.receiver.ack(message)
+        except Exception as e:
+            print(f"exception: {e}")
 
 config = {
     "solace.messaging.transport.host": "tcp://localhost:55554",
@@ -26,7 +35,8 @@ receiver = messaging_service.create_persistent_message_receiver_builder().build(
 receiver.start()
 
 # Subscribe
-receiver.receive_async(MyMessageHandler())
+my_handler = MyMessageHandler(receiver)
+receiver.receive_async(my_handler)
 
 print ("Starting to receive que messages. Please Ctlr+C to stop")
 try:

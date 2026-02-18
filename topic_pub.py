@@ -30,7 +30,7 @@ publisher.start()
 # Publish messages
 loop_count = 0
 while True:
-    if (loop_count > 2):
+    if (loop_count > 10):
         break
     else:
         loop_count += 1
@@ -40,7 +40,7 @@ while True:
     message = messaging_service.message_builder().build(new_msg)
     publisher.publish(destination=topic, message=message)
     print(f"message published: {new_msg}")
-    time.sleep(3)
+    time.sleep(1)
 
 publisher.terminate()
 print("publisher terminated")
